@@ -1,13 +1,25 @@
 import 'tailwindcss/tailwind.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
+//import { GetStaticProps, NextPage, NextPageContext } from 'next'
+import Layout from 'layout';
+
+/*
+interface IProps {
+  Component: NextPage;
+  pageProps:any
+}*/
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className="h-screen overflow-hidden flex items-center justify-center" style={{ background: "#edf2f7" }}>
-      <div className="flex h-screen w-full bg-gray-800 " x-data="{openMenu:1}">
+    <Layout>
       <Component {...pageProps} />
-      </div>
-    </div>
+    </Layout>
   )
 }
 export default MyApp
+/*
+MyApp.getInitialProps = async (ctx) => {
+  const res = await fetch('https://api.github.com/repos/vercel/next.js')
+  const json = await res.json()
+  return { stars: json.stargazers_count }
+}*/
