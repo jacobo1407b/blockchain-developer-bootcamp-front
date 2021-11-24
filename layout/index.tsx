@@ -2,14 +2,15 @@ import React, { FunctionComponent } from 'react';
 import SideBar from '../components/sidebar';
 
 interface ILayout {
-    children: JSX.Element
+    children: React.ReactNode;
+    login:boolean;
 }
-const Layout: FunctionComponent<ILayout> = ({ children }) => {
+const Layout: FunctionComponent<ILayout> = ({ children,login }) => {
     return (
-        <div className="h-screen overflow-hidden flex items-center justify-center" style={{ background: "#edf2f7" }}>
+       
             <div className="flex h-screen w-full bg-gray-800 " x-data="{openMenu:1}">
                 {/**SideBar start */}
-                <SideBar />
+                {login && <SideBar />}
                 {/**SideBar end */}
                 <div className="flex flex-col flex-1 w-full overflow-y-auto">
                     <main className="relative z-0 flex-1 pb-8 px-6 bg-white">
@@ -21,7 +22,7 @@ const Layout: FunctionComponent<ILayout> = ({ children }) => {
                 </div>
 
             </div>
-        </div>
+
     )
 }
 

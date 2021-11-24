@@ -1,25 +1,45 @@
+const { DrizzleContext } = require("@drizzle/react-plugin");
+import { Drizzle, IDrizzleOptions } from "@drizzle/store";
+import Asset from 'utils/contracts/AssetT.json';
 import 'tailwindcss/tailwind.css'
 import type { AppProps } from 'next/app';
-//import { GetStaticProps, NextPage, NextPageContext } from 'next'
 import Layout from 'layout';
 
-/*
-interface IProps {
-  Component: NextPage;
-  pageProps:any
-}*/
 
-function MyApp({ Component, pageProps }: AppProps) {
+interface IProps extends AppProps {
+  Component: any;
+  pageProps: any;
+  login: boolean;
+};
+interface IState extends IDrizzleOptions {
+  contracts: any;
+}
+
+const options: IState = {
+  contracts: [Asset],
+  web3: {
+    fallback: {
+      type: 'ws',
+      url: process.env.WSCONTRATO!
+    }
+  }
+};
+
+const drizzle = new Drizzle(options);
+function MyApp({ Component, pageProps, login }: IProps) {
+  
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <DrizzleContext.Provider drizzle={drizzle}>
+        <Layout login={login}>
+          <Component {...pageProps} />
+        </Layout>
+    </DrizzleContext.Provider>
+
   )
 }
 export default MyApp
-/*
-MyApp.getInitialProps = async (ctx) => {
-  const res = await fetch('https://api.github.com/repos/vercel/next.js')
-  const json = await res.json()
-  return { stars: json.stargazers_count }
-}*/
+
+MyApp.getInitialProps = async (ctx: any) => {
+  const login = false;
+  return { login }
+}
