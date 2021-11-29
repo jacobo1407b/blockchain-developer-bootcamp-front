@@ -1,9 +1,12 @@
-const { DrizzleContext } = require("@drizzle/react-plugin");
+//import Cookies from 'cookies'
 import { Drizzle, IDrizzleOptions } from "@drizzle/store";
-import Asset from 'utils/contracts/AssetT.json';
+import { Provider } from 'react-redux';
+import Asset from 'utils/block/build/contracts/AssetT.json';
 import 'tailwindcss/tailwind.css'
 import type { AppProps } from 'next/app';
 import Layout from 'layout';
+import store from "redux/store";
+const { DrizzleContext } = require("@drizzle/react-plugin");
 
 
 interface IProps extends AppProps {
@@ -26,20 +29,23 @@ const options: IState = {
 };
 
 const drizzle = new Drizzle(options);
-function MyApp({ Component, pageProps, login }: IProps) {
-  
+function MyApp({ Component, pageProps }: IProps) {
   return (
     <DrizzleContext.Provider drizzle={drizzle}>
-        <Layout login={login}>
+      <Provider store={store}>
+        <Layout drizzle={drizzle}>
           <Component {...pageProps} />
         </Layout>
+      </Provider>
     </DrizzleContext.Provider>
 
-  )
+  );
 }
 export default MyApp
 
-MyApp.getInitialProps = async (ctx: any) => {
-  const login = false;
+/*MyApp.getInitialProps = async (ctx: any) => {
+  const cookies = new Cookies(ctx?.ctx?.req, ctx?.ctx?.res);
+  var isSesion = cookies.get('userlogin')
+  const login = isSesion ? true : false
   return { login }
-}
+}*/

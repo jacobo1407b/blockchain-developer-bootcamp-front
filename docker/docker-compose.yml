@@ -5,7 +5,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /data/db:/data/db
+      - /dat/db:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
@@ -28,3 +28,20 @@ services:
       - "traefik.docker.network.alias.mongo.local.frontend.passTLSCert=true"
       - "traefik.docker.network.alias.mongo.local.frontend.priority=666"
       - "traefik.docker.network.alias.mongo.local.frontend.tls.certresolver.fqdn=mongo.local"
+  ipfs0:
+    image: ipfs/go-ipfs:v0.5.1
+    container_name: ipfs0
+    restart: on-failure
+    environment:
+      - IPFS_API_ALLOW_ORIGIN='*'
+      - IPFS_API_METHODS='["GET", "POST", "PUT", "DELETE", "OPTIONS"]'
+      - IPFS_API_CORS_DOMAINS='["*"]'
+      - IPFS_API_CORS_HEADERS='["Origin", "Content-Type", "Accept", "X-Requested-With", "Range", "If-Range", "If-Unmodified-Since", "If-Match", "If-None-Match", "Authorization", "Accept-Encoding", "Accept-Language", "DNT", "Cache-Control", "Pragma", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Proto", "X-Forwarded-Port", "X-Forwarded-Prefix", "X-Forwarded-Ssl", "X-Real-Ip", "X-Scheme", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Proto", "X-Forwarded-Port", "X-Forwarded-Prefix", "X-Forwarded-Ssl", "X-Real-Ip", "X-Scheme", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Proto", "X-Forwarded-Port", "X-Forwarded-Prefix", "X-Forwarded-Ssl", "X-Real-Ip", "X-Scheme", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Proto", "X-Forwarded-Port", "X-Forwarded-Prefix", "X-Forwarded-Ssl", "X-Real-Ip", "X-Scheme", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Proto", "X-Forwarded-Port", "X-Forwarded-Prefix", "X-Forwarded-Ssl", "X-Real-Ip", "X-Scheme", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Proto", "X-Forwarded-Port", "X-Forwarded-Prefix", "X-Forwarded-Ssl", "X-Real-Ip", "X-Scheme", "X-Forwarded-For", "X-Forwarded-Host", "X-Forwarded-Pro
+      - IPFS_API_CORS_METHODS='["GET", "POST", "PUT", "DELETE", "OPTIONS"]'
+    ports:
+      - "4001:4001"
+      - "127.0.0.1:5001:5001"
+      - "8080:8080"
+    volumes:
+      - ./ipfs-dat/daemon/staging:/export
+      - ./ipfs-dat/daemon/data:/data/ipfs

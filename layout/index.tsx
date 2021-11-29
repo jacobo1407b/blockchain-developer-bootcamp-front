@@ -1,11 +1,13 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent} from 'react';
 import SideBar from '../components/sidebar';
+import { useSelector } from 'react-redux';
 
 interface ILayout {
     children: React.ReactNode;
-    login:boolean;
+    drizzle:any
 }
-const Layout: FunctionComponent<ILayout> = ({ children,login }) => {
+const Layout: FunctionComponent<ILayout> = ({ children }) => {
+    const login = useSelector((state:any) => state.login)
     return (
        
             <div className="flex h-screen w-full bg-gray-800 " x-data="{openMenu:1}">

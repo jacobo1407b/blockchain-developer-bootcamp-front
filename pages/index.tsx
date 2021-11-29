@@ -1,11 +1,60 @@
+import { useState } from 'react';
+import Cookies from 'cookies'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import Head from 'next/head';
 import CardLogin from '@components/CardLogin';
+import useAuth from 'hooks/Auth';
 
 
-const Home: NextPage = () => {
+type FormData = {
+  address: string;
+  password: string;
+}
+
+const Home: NextPage = (props: any) => {
+  useAuth(props.login, props.sesion)
+  const router = useRouter()
+
+  const [formData, setformData] = useState<FormData>(initialState());
+  const [load, setLoad] = useState<boolean>(false)
+
+
+  function onChange(e: any) {
+    const { value, name } = e.target;
+    setformData({
+      ...formData,
+      [name]: value
+    });
+  }
+
+  function onSubmit() {
+    if (!formData.address || !formData.password) {
+      alert('Complete los campos')
+    } else {
+      setLoad(true)
+      fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then(res => res.json())
+        .then(res => {
+          setLoad(false)
+          if (res.error) {
+            alert(res.message)
+          } else {
+            router.push('/home')
+          }
+        })
+    }
+  }
+
   return (
     <>
+
       <Head>
         <title>Login</title>
       </Head>
@@ -18,7 +67,11 @@ const Home: NextPage = () => {
               </div>
 
               <div className="flex flex-col items-start my-4 text-left lg:pl-10">
-              <CardLogin/> 
+                <CardLogin
+                  loading={load}
+                  onChange={onChange}
+                  onSubmit={onSubmit}
+                />
               </div>
             </div>
           </div>
@@ -115,8 +168,26 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
+
     </>
   )
 }
 
+function initialState(): FormData {
+  return {
+    address: "",
+    password: ""
+  }
+}
 export default Home
+
+export async function getServerSideProps(ctx: any) {
+  //console.log(ctx)
+  const cookies = new Cookies(ctx?.req, ctx?.res);
+  var isSesion = cookies.get('userlogin')
+  const login = isSesion ? true : false
+  var sesion = isSesion ? isSesion : null;
+  return {
+    props: { login, sesion }
+  }
+}

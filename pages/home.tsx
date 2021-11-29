@@ -1,7 +1,11 @@
 import type { NextPage } from 'next'
+import Cookies from 'cookies'
 import Head from 'next/head';
 import TitleBar from 'components/titlebar';
-const HomeUser: NextPage = () => {
+import useAuth from 'hooks/Auth';
+
+const HomeUser: NextPage = (props: any) => {
+    useAuth(props.login, props.sesion)
     return (
         <>
             <Head>
@@ -154,3 +158,21 @@ const HomeUser: NextPage = () => {
 }
 
 export default HomeUser;
+export async function getServerSideProps(ctx: any) {
+    const cookies = new Cookies(ctx?.req, ctx?.res);
+    var isSesion = cookies.get('userlogin')
+    const login = isSesion ? true : false
+    var sesion = isSesion ? isSesion : null;
+    if (!login) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+            props:{ login, sesion }
+        }
+    }
+    return {
+        props: { login, sesion }
+    }
+}
