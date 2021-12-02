@@ -21,6 +21,7 @@ interface IState extends IDrizzleOptions {
   contracts: any;
 }
 
+
 const options: IState = {
   contracts: [Asset],
   web3: {
