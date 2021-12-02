@@ -39,3 +39,6 @@
         opacity: 0;
     }
 }
+.my-over:hover{
+    cursor: pointer;
+}

@@ -187,6 +187,18 @@ export async function getServerSideProps(ctx: any) {
   var isSesion = cookies.get('userlogin')
   const login = isSesion ? true : false
   var sesion = isSesion ? isSesion : null;
+
+  if (login) {
+    return {
+      redirect: {
+        destination: '/propiedades',
+        permanent: false,
+      },
+      props: { login, sesion }
+    }
+  }
+
+
   return {
     props: { login, sesion }
   }

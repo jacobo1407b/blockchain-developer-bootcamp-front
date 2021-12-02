@@ -32,6 +32,18 @@ const Register: NextPage = (props: any) => {
         }
         return true;
     }
+
+    function clearForm() {
+        setFormData(initState());
+        const addressForm = document.getElementById('address') as HTMLInputElement;
+        addressForm.value = '';
+        const nameForm = document.getElementById('name') as HTMLInputElement;
+        nameForm.value = '';
+        const usernameForm = document.getElementById('username') as HTMLInputElement;
+        usernameForm.value = '';
+        const passwordForm = document.getElementById('password') as HTMLInputElement;
+        passwordForm.value = '';
+    }
     function onSubmit() {
         if (!validate()) {
             alert('Please fill all the fields');
@@ -56,6 +68,7 @@ const Register: NextPage = (props: any) => {
                             .then(() => {
                                 setload(false)
                                 alert(data.message);
+                                clearForm();
                             })
                     } else {
                         setload(false)
@@ -109,6 +122,7 @@ const Register: NextPage = (props: any) => {
                                                         onChange={onChange}
                                                         className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
                                                         type="text"
+                                                        id="address"
                                                         name="address"
                                                         placeholder="0x00000000000000000000000"
                                                     />
@@ -125,6 +139,7 @@ const Register: NextPage = (props: any) => {
                                                         type="text"
                                                         onChange={onChange}
                                                         name="name"
+                                                        id="name"
                                                         placeholder="Full name"
                                                     />
                                                 </div>
@@ -138,6 +153,7 @@ const Register: NextPage = (props: any) => {
                                                         className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
                                                         type="text"
                                                         name="username"
+                                                        id="username"
                                                         placeholder="Username"
                                                         onChange={onChange}
                                                     />
@@ -152,6 +168,7 @@ const Register: NextPage = (props: any) => {
                                                         className="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
                                                         type="password"
                                                         name="password"
+                                                        id="password"
                                                         placeholder="Enter your password"
                                                         onChange={onChange}
                                                     />
@@ -206,6 +223,17 @@ export async function getServerSideProps(ctx: any) {
     var isSesion = cookies.get('userlogin')
     const login = isSesion ? true : false
     var sesion = isSesion ? isSesion : null;
+
+    if (login) {
+        return {
+            redirect: {
+                destination: '/propiedades',
+                permanent: false,
+            },
+            props: { login, sesion }
+        }
+    }
+    
     return {
         props: { login, sesion }
     }
