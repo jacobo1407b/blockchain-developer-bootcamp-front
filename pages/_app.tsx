@@ -27,7 +27,7 @@ const options: IState = {
   web3: {
     fallback: {
       type: 'ws',
-      url: process.env.WSCONTRATO!
+      url: 'wss://rinkeby.infura.io/ws/v3/49ebf8fbe1c54a1bbf42b8527e3eab66'
     }
   }
 };
