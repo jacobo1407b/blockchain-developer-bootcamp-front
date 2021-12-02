@@ -15,6 +15,12 @@ type State = {
         logo: string;
         nameimg: string;
     }
+    contract: any;
+    modal:{
+        title: string;
+        body: React.ReactNode | null;
+    }
+    property:[]
 }
 const initialState: State = {
     login: false,
@@ -25,7 +31,13 @@ const initialState: State = {
         address: "",
         logo: "",
         nameimg: "",
-    }
+    },
+    contract: null,
+    modal:{
+        title: "",
+        body: null,
+    },
+    property:[]
 }
 function updateState(state = initialState, action: Action) {
     switch (action.type) {
@@ -39,6 +51,21 @@ function updateState(state = initialState, action: Action) {
                 ...state,
                 user: action.payload,
             };
+        case "CONTRACT":
+            return {
+                ...state,
+                contract: action.payload.contracts,
+            }
+        case "MODAL":
+            return {
+                ...state,
+                modal: action.payload,
+            }
+        case "PROPERTY":
+            return {
+                ...state,
+                property: action.payload,
+            }
         default:
             return {
                 ...state,

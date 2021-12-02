@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 import multer from 'multer';
 import { create, Options } from 'ipfs-http-client';
-
+import User from 'models/User';
 var opt: Options = {
     url: process.env.IPFS_URL
 }
@@ -23,7 +23,11 @@ apiRoute.post(async (req: any, res: any) => {
         content: req.file.buffer
     }
     var uploadfile = await ipfs.add(file);
-    res.status(200).json({ data: 'success',cid:uploadfile.cid.toString() });
+    const update = await User.findByIdAndUpdate(req.body.id, {
+        logo: uploadfile.cid.toString()
+    }, { new: true });
+    delete update.password;
+    res.status(200).json({ data: 'success', update });
 });
 
 export default apiRoute;

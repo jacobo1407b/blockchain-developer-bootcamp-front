@@ -1,13 +1,18 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+var Cookies = require('cookies')
+
 
 type Data = {
-  name: string
+  msg?: string
 }
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  
+  const cookies = new Cookies(req, res)
+  cookies.set('userlogin', JSON.stringify(undefined))
+  res.status(200).json({ msg: 'Logout' })
 }

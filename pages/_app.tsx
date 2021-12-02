@@ -3,10 +3,13 @@ import { Drizzle, IDrizzleOptions } from "@drizzle/store";
 import { Provider } from 'react-redux';
 import Asset from 'utils/block/build/contracts/AssetT.json';
 import 'tailwindcss/tailwind.css'
+import '../index.css'
 import type { AppProps } from 'next/app';
 import Layout from 'layout';
 import store from "redux/store";
+import Modal from "@components/Modal";
 const { DrizzleContext } = require("@drizzle/react-plugin");
+
 
 
 interface IProps extends AppProps {
@@ -30,9 +33,11 @@ const options: IState = {
 
 const drizzle = new Drizzle(options);
 function MyApp({ Component, pageProps }: IProps) {
+
   return (
     <DrizzleContext.Provider drizzle={drizzle}>
       <Provider store={store}>
+        <Modal/>
         <Layout drizzle={drizzle}>
           <Component {...pageProps} />
         </Layout>

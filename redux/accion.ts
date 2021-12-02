@@ -13,3 +13,22 @@ export function setSesion(sesion: boolean){
         payload: sesion
     }
 }
+export function setContract(contract: any){
+    return{
+        type: action.CONTRACT,
+        payload: contract
+    }
+}
+export function setModal(modal: any){
+    return{
+        type: action.MODAL,
+        payload: modal
+    }
+}
+
+export function setProperty(property: any){
+    return{
+        type: action.PROPERTY,
+        payload: property
+    }
+}

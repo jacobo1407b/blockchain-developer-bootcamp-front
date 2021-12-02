@@ -46,7 +46,7 @@ const Home: NextPage = (props: any) => {
           if (res.error) {
             alert(res.message)
           } else {
-            router.push('/home')
+            router.push('/propiedades')
           }
         })
     }
