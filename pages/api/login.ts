@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Cookies from 'cookies'
 import User from 'models/User';
-import {comparePassword} from 'utils';
+import { comparePassword } from 'utils';
+import connectDB from 'utils/db';
 
 type Data = {
     error?: boolean;
@@ -14,20 +15,22 @@ interface ExtendedNextApiRequest extends NextApiRequest {
     };
 }
 
-export default async function handler(req: ExtendedNextApiRequest,res: NextApiResponse<Data>) {
+async function handler(req: ExtendedNextApiRequest, res: NextApiResponse<Data>) {
     const cookies = new Cookies(req, res)
     const { address, password } = req.body;
     const user = await User.findOne({ address });
-    if(!user){
-        res.status(401).json({message:'Usuario no encontrado',error:true})
-    }else{
-        if(await comparePassword(password,user.password)){
+    if (!user) {
+        res.status(401).json({ message: 'Usuario no encontrado', error: true })
+    } else {
+        if (await comparePassword(password, user.password)) {
             user.password = "";
             delete user.password;
             cookies.set('userlogin', JSON.stringify(user))
-            res.status(200).json({message:'Login success',error:false})
-        }else{
-            res.status(401).json({message:'Password no correcto',error:true})
+            res.status(200).json({ message: 'Login success', error: false })
+        } else {
+            res.status(401).json({ message: 'Password no correcto', error: true })
         }
     }
 }
+
+export default connectDB(handler);

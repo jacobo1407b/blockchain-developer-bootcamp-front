@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import User from 'models/User';
+import connectDB from 'utils/db';
 import {hashPassword} from 'utils';
+
 type Data = {
     error?: string;
     message?: string;
@@ -16,7 +18,7 @@ interface ExtendedNextApiRequest extends NextApiRequest {
 }
 
 
-export default async function handler(req: ExtendedNextApiRequest,res: NextApiResponse<Data>) {
+async function handler(req: ExtendedNextApiRequest,res: NextApiResponse<Data>) {
     const { address, name, username, password } = req.body;
     const isuser = await User.findOne({ address });
     if(isuser) {
@@ -35,3 +37,4 @@ export default async function handler(req: ExtendedNextApiRequest,res: NextApiRe
         res.status(200).json({message: 'User created', id: register._id});
     }
 }
+export default connectDB(handler);

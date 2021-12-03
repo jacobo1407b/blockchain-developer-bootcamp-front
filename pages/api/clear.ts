@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import User from 'models/User';
+import User from 'models/User';;
+import connectDB from 'utils/db';
+
 
 type Data = {
     error?: string;
@@ -9,7 +11,7 @@ type Data = {
 
 
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     User.deleteMany({}, (err) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -19,3 +21,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
     );
 }
+
+export default connectDB(handler);
